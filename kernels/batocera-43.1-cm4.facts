@@ -1,0 +1,29 @@
+# Batocera 43.1, Raspberry Pi CM4 image (aarch64).
+# Kernel: raspberrypi/linux @ a1073743767f9e7fd... (6.12.62)
+# Probed from a booted image: vermagic via `modinfo -F vermagic` on the stock
+# snd-bcm2835.ko ("6.12.62-v8 SMP preempt mod_unload modversions aarch64").
+#
+# CONFIG_MODVERSIONS is ON for this image, so the module carries symbol CRCs
+# that must match the running kernel's table. We can't run a full kernel build
+# to generate Module.symvers, so a symvers was harvested instead: the stock
+# snd-bcm2835.ko records (in its __versions section) the kernel's CRC for
+# every symbol it imports, and since it loads on this exact kernel those CRCs
+# are by definition correct. Our patched module imports no symbols beyond the
+# stock set, so the harvest fully covers it. The build refuses to ship if
+# modpost reports a symbol missing from the symvers ("no CRC").
+#
+# Source pinned via configs/batocera-bcm2711.board at tag batocera-43.1
+# (BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION). Their patches touch only HID
+# drivers, not bcm2835-audio. Config = their base defconfig + fragment,
+# merged at build time the same way buildroot does.
+IMAGE=batocera-43.1-cm4
+ARCH=arm64
+KERNEL_RELEASE=6.12.62
+VERMAGIC="6.12.62-v8 SMP preempt mod_unload modversions aarch64"
+MODVERSIONS=on
+SYMVERS=kernels/symvers/batocera-43.1-cm4.symvers
+UPSTREAM_COMMIT=a1073743767f9e7fdc7017ababd2a07ea0c97c1c
+UPSTREAM_SHA256=9937857c240971c512f4d27700ca77743ba3bd701a7b3955c41ea8bac5077c7f
+KERNEL_CONFIG=kernels/configs/batocera-43.1-cm4.config
+KERNEL_CONFIG_FRAGMENT=kernels/configs/batocera-43.1-cm4-fragment.config
+MODULES="snd-bcm2835-mono"

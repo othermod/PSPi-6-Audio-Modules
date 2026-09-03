@@ -1,0 +1,43 @@
+name: build-modules
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      pspi_ref:
+        description: "PSPi-Version-6 ref to build against"
+        default: "main"
+
+jobs:
+  build:
+    # Native arm64 runner: no cross toolchain needed, script runs unchanged.
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential bc bison flex libssl-dev libelf-dev
+
+      - name: Build all facts files
+        run: |
+          ./build.sh --pspi-ref "${{ github.event.inputs.pspi_ref || 'main' }}" kernels/*.facts
+
+      - name: Upload artifacts (every run)
+        uses: actions/upload-artifact@v4
+        with:
+          name: modules
+          path: dist/
+
+      - name: Release (tag pushes only)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/**/*.ko
+            dist/**/manifest.txt
