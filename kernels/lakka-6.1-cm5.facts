@@ -1,0 +1,24 @@
+# Lakka 6.1, Raspberry Pi CM5 image (aarch64). First RP1-platform image.
+# Kernel: raspberrypi/linux @ 201575782c30... (rpi-6.12.y, 6.12.66)
+# Probed from the booted CM5: vermagic is byte-identical to the CM4 image
+# ("6.12.66 SMP mod_unload aarch64"), and the module tree ships both bcm2835
+# and RP1 drivers (rp1_aout.ko at kernel/sound/soc/raspberrypi/), i.e. one
+# kernel build serves the rpi image family. So the CM4 kernel pin, config and
+# symvers situation (MODVERSIONS off, no signing) apply here unchanged; only
+# the module list differs. Config from the Lakka-LibreELEC tree at BUILD_ID
+# ad1a27aac8e37e0cf810b243b2bdf9f798e45dd4
+# (projects/RPi/devices/RPi4/linux/linux.aarch64.conf).
+#
+# On CM5 the analog audio block is RP1 "rp1_audio_out" (not bcm2835/PWM);
+# the module to ship is rp1-aout-mono. Downmix is enabled by a device-tree
+# property the CM5 overlay sets (mono_mix read via of_property_read_bool at
+# probe) -- there is no module parameter or bootarg on this platform.
+IMAGE=lakka-6.1-cm5
+ARCH=arm64
+KERNEL_RELEASE=6.12.66
+VERMAGIC="6.12.66 SMP mod_unload aarch64"
+MODVERSIONS=off
+UPSTREAM_COMMIT=201575782c30fd948415a191a814e28fe0db90dc
+UPSTREAM_SHA256=b89d4a38312f201514711a2e2c6d0bc8a07e6f59b4b96cd5e7b7693854bc7404
+KERNEL_CONFIG=kernels/configs/lakka-6.1-cm4.config
+MODULES="rp1-aout-mono"
