@@ -24,7 +24,25 @@ dist/<image>/              build output: <module>.ko + manifest.txt
 | facts file | image | kernel | notes |
 |---|---|---|---|
 | `kernels/lakka-6.1-cm4.facts` | Lakka 6.1 (CM4, arm64) | 6.12.66 | modversions off |
-| (batocera pending) | | | |
+| `kernels/batocera-43.1-cm4.facts` | Batocera 43.1 (CM4, arm64) | 6.12.62-v8 | modversions on; symvers harvested from stock module |
+
+## Deployment notes
+
+How the modules get onto a running device once built (the main patcher does
+this automatically):
+
+**Lakka 6.1** — copy the `.ko` to `/storage/snd-bcm2835.ko`; `boot.sh`
+loads it at boot (a block at the top of `scripts/config/boot.sh` in the
+PSPi repo). The `mono_mix` parameter cannot reach the kernel cmdline, so
+`boot.sh` passes it as an insmod option.
+
+**Batocera 43.1** — install the `.ko` into
+`/lib/modules/<kver>/updates/`, run `depmod -b / <kver>` (the `updates/`
+copy then shadows the stock module), and copy the updated
+`pspi-audio-cm4-kernel6+.dtbo` from the PSPi repo to `/boot/overlays/`.
+Run `batocera-save-overlay` to persist the root filesystem changes across
+reboots. Batocera *does* honor the overlay's bootargs, so the cmdline's
+`snd_bcm2835.mono_mix=1` activates the downmix with no extra hook.
 
 ## Building
 
@@ -33,6 +51,7 @@ Needs: bash, curl, git, patch, make, gcc, readelf. Runs on any Linux host
 
 ```
 ./build.sh kernels/lakka-6.1-cm4.facts
+./build.sh kernels/batocera-43.1-cm4.facts
 ```
 
 The script downloads the PSPi-Version-6 repo at `--pspi-ref` (default
@@ -47,7 +66,8 @@ kernel source at the pinned commit, prepares it, builds, and verifies each
    `CONFIG_MODVERSIONS` (check for a `__versions` section in any shipped
    `.ko`).
 2. Find the kernel source commit + config the distro builds with.
-3. Write `kernels/<image>.facts`; commit the config under `kernels/configs/`.
+3. Write `kernels/<image>.facts`; commit the config (and fragment, if the
+   distro merges one) under `kernels/configs/`.
 4. If the kernel has modversions on, harvest a `Module.symvers` from the
    stock module's `__versions` section and commit it under `kernels/symvers/`.
 5. Add the image to the table above.
