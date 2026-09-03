@@ -1,0 +1,15 @@
+# Raspberry Pi OS (Debian trixie), CM5 kernel of the arm64-LITE image. The
+# lite image's kernel trees are byte-identical to the full arm64 image's
+# (verified by mounting both: rp1_aout.ko md5 match, same dpkg linux-image
+# versions), so this facts file reuses the full image's config and
+# Module.symvers. See 2026-06-18-raspios-trixie-arm64-2712.facts.
+IMAGE=2026-06-18-raspios-trixie-arm64-lite-2712
+ARCH=arm64
+KERNEL_RELEASE=6.18.34+rpt-rpi-2712
+VERMAGIC="6.18.34+rpt-rpi-2712 SMP preempt mod_unload modversions aarch64"
+MODVERSIONS=on
+SYMVERS=kernels/symvers/2026-06-18-raspios-trixie-arm64-2712.symvers
+UPSTREAM_COMMIT=c8c7494100e99ee05b11aaa4f0588a223a63d1af
+UPSTREAM_SHA256=e159f4262148242c004f9ed0e035dfb04cc966ad9c83d296839a17305c3acce6
+KERNEL_CONFIG=kernels/configs/2026-06-18-raspios-trixie-arm64-2712.config
+MODULES="rp1-aout-mono"

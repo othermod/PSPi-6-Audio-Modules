@@ -16,6 +16,9 @@
 #   SYMVERS           path (repo-relative) to a harvested Module.symvers
 #   UPSTREAM_COMMIT   raspberrypi/linux commit matching the image kernel
 #   KERNEL_CONFIG     path (repo-relative) to the kernel .config
+#   KERNEL_SUBLEVEL   optional: override the kernel Makefile's SUBLEVEL
+#                     (Ubuntu pins an import-era SUBLEVEL the upstream
+#                     branch no longer offers as one commit)
 #   MODULES           space-separated module dir names (under rpi/audio/ in
 #                     the PSPi repo, e.g. snd-bcm2835-mono rp1-aout-mono)
 #
@@ -120,6 +123,16 @@ prepare_kdir() {
     mv "$WORK_ROOT/.untar"/* "$kdir"
     rmdir "$WORK_ROOT/.untar"
     cp "$HERE/$KERNEL_CONFIG" "$kdir/.config"
+
+    # Distros sometimes pin an import-era kernel SUBLEVEL (e.g. Ubuntu's
+    # 7.0.0) while the upstream branch we can fetch today has advanced
+    # (rebase + stable series). MODULES only need matching vermagic + ABI,
+    # not matching source, so facts may override SUBLEVEL to reproduce the
+    # image's exact release string.
+    if [[ -n "${KERNEL_SUBLEVEL:-}" ]]; then
+        sed -i "s/^SUBLEVEL = .*/SUBLEVEL = $KERNEL_SUBLEVEL/" "$kdir/Makefile"
+        say "SUBLEVEL overridden to $KERNEL_SUBLEVEL"
+    fi
 
     log "oldconfig + modules_prepare"
     {

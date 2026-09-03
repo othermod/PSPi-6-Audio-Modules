@@ -1,0 +1,37 @@
+# Ubuntu 26.04 LTS "Resolute Raccoon", preinstalled desktop arm64+raspi
+# image (the patcher's single "all" target covers CM4 AND CM5).
+# Kernel: Ubuntu linux-raspi 7.0.0-1009.9; the deb changelog says
+# "Update to upstream raspberrypi rpi-7.0.y (2026-04-01)". The image ships
+# NO kernel headers; the matching linux-headers-7.0.0-1009-raspi /
+# linux-raspi-headers-7.0.0-1009 debs from ports.ubuntu.com were used.
+# Verified by mounting the stock image: vermagic
+# "7.0.0-1009-raspi SMP preempt mod_unload modversions aarch64",
+# CONFIG_MODVERSIONS=y, module signing not forced.
+#
+# Both drivers ship as stock modules in this kernel (snd-bcm2835 at
+# kernel/drivers/staging/vc04_services/bcm2835-audio, rp1_aout at
+# kernel/sound/soc/raspberrypi), so this one facts file builds both mono
+# modules for both targets.
+#
+# Module.symvers (28077 symbols, Ubuntu-built) and .config come from the
+# headers debs; all __versions imports of both stock modules match that
+# symvers exactly. The headers .config has CONFIG_LOCALVERSION="" (Ubuntu
+# injects the -1009 ABI + -raspi flavor at build time); it was rewritten to
+# CONFIG_LOCALVERSION="-1009-raspi" to reproduce the image vermagic.
+#
+# KERNEL_SUBLEVEL: the rpi-7.0.y branch was rebased on 2026-07-01 onto the
+# stable 7.0.14 base, so no fetchable commit has SUBLEVEL=0 with the RPi
+# patchset. We pin the branch head and fold SUBLEVEL 14 -> 0; module ABI
+# comes from the Ubuntu symvers, so the source delta (7.0.0 vs 7.0.14
+# stable fixes) is irrelevant for these modules.
+IMAGE=ubuntu-26.04-preinstalled-desktop-arm64+raspi
+ARCH=arm64
+KERNEL_RELEASE=7.0.0-1009-raspi
+VERMAGIC="7.0.0-1009-raspi SMP preempt mod_unload modversions aarch64"
+MODVERSIONS=on
+SYMVERS=kernels/symvers/ubuntu-26.04-preinstalled-desktop-arm64+raspi.symvers
+UPSTREAM_COMMIT=42d9bb9081f1c55e11abb5cbf4d7bede01d7bdde
+UPSTREAM_SHA256=657893df3d9fc70ae28482ab0caea6ab5365e34885263b23cb63262ff3e40e20
+KERNEL_SUBLEVEL=0
+KERNEL_CONFIG=kernels/configs/ubuntu-26.04-preinstalled-desktop-arm64+raspi.config
+MODULES="snd-bcm2835-mono rp1-aout-mono"

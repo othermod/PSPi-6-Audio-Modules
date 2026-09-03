@@ -1,0 +1,16 @@
+# Raspberry Pi OS (Debian trixie), Raspberry Pi CM4 kernel of the arm64-LITE
+# image. The lite image's kernel trees are byte-identical to the full arm64
+# image's (verified by mounting both: snd-bcm2835.ko and rp1_aout.ko md5
+# match, same dpkg linux-image versions), so this facts file reuses the full
+# image's config and Module.symvers. See 2026-06-18-raspios-trixie-arm64.facts
+# for the full derivation notes.
+IMAGE=2026-06-18-raspios-trixie-arm64-lite
+ARCH=arm64
+KERNEL_RELEASE=6.18.34+rpt-rpi-v8
+VERMAGIC="6.18.34+rpt-rpi-v8 SMP preempt mod_unload modversions aarch64"
+MODVERSIONS=on
+SYMVERS=kernels/symvers/2026-06-18-raspios-trixie-arm64.symvers
+UPSTREAM_COMMIT=c8c7494100e99ee05b11aaa4f0588a223a63d1af
+UPSTREAM_SHA256=e159f4262148242c004f9ed0e035dfb04cc966ad9c83d296839a17305c3acce6
+KERNEL_CONFIG=kernels/configs/2026-06-18-raspios-trixie-arm64.config
+MODULES="snd-bcm2835-mono"
