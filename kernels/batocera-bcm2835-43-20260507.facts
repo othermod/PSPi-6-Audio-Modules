@@ -1,0 +1,23 @@
+# Batocera 43, Raspberry Pi 1 / Zero image (armhf, 32-bit).
+# Kernel: raspberrypi/linux @ a1073743767f9e7fd... (6.12.62), built for
+# ARMv6 via arch/arm/configs/bcmrpi_defconfig + batocera's shared broadcom
+# fragment (buildroot merges them; config here = defconfig output, fragment
+# merged by build.sh). Validated by mounting the stock image:
+# vermagic "6.12.62 mod_unload modversions ARMv6 p2v8 " (NOTE trailing space,
+# ARM kernel quirk; exact-match), CONFIG_MODVERSIONS=y, 32-bit ARM ELF,
+# module .ko.gz compressed. 68 symbol CRCs harvested from the stock
+# snd-bcm2835.ko. Source pinned via configs/batocera-bcm2835.board at tag
+# batocera-43 (BR2_LINUX_KERNEL_DEFCONFIG=bcmrpi).
+# Build requires the armhf cross toolchain:
+#   build.sh <facts> --cross-compile arm-linux-gnueabihf-13-
+IMAGE=batocera-bcm2835-43-20260507
+ARCH=arm
+KERNEL_RELEASE=6.12.62
+VERMAGIC="6.12.62 mod_unload modversions ARMv6 p2v8 "
+MODVERSIONS=on
+SYMVERS=kernels/symvers/batocera-bcm2835-43-20260507.symvers
+UPSTREAM_COMMIT=a1073743767f9e7fdc7017ababd2a07ea0c97c1c
+UPSTREAM_SHA256=9937857c240971c512f4d27700ca77743ba3bd701a7b3955c41ea8bac5077c7f
+KERNEL_CONFIG=kernels/configs/batocera-bcm2835-43-20260507.config
+KERNEL_CONFIG_FRAGMENT=kernels/configs/batocera-bcm2835-43-20260507-fragment.config
+MODULES="snd-bcm2835-mono"

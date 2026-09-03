@@ -1,0 +1,23 @@
+# Batocera 43.1, Raspberry Pi 3 image (aarch64).
+# Kernel: raspberrypi/linux @ a1073743767f9e7fd... (6.12.62) - the SAME source
+# commit as batocera-bcm2711, but a DIFFERENT build: batocera's bcm2837
+# linux-defconfig.config differs from bcm2711's, so despite the identical
+# vermagic ("6.12.62-v8 SMP preempt mod_unload modversions aarch64") 47 of the
+# 62 symbol CRCs differ. Validated by mounting the stock image and comparing
+# the stock snd-bcm2835.ko's __versions against the bcm2711 symvers. This is
+# the proof that MODVERSIONS images need per-image symvers - vermagic alone
+# is not a sufficient ABI identity. Symvers harvested from this image's stock
+# module. Source pinned via configs/batocera-bcm2837.board at tag batocera-43.1
+# (BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION); config = their base defconfig +
+# the shared broadcom fragment, merged at build time the way buildroot does.
+IMAGE=batocera-bcm2837-43.1-20260530
+ARCH=arm64
+KERNEL_RELEASE=6.12.62
+VERMAGIC="6.12.62-v8 SMP preempt mod_unload modversions aarch64"
+MODVERSIONS=on
+SYMVERS=kernels/symvers/batocera-bcm2837-43.1-20260530.symvers
+UPSTREAM_COMMIT=a1073743767f9e7fdc7017ababd2a07ea0c97c1c
+UPSTREAM_SHA256=9937857c240971c512f4d27700ca77743ba3bd701a7b3955c41ea8bac5077c7f
+KERNEL_CONFIG=kernels/configs/batocera-bcm2837-43.1-20260530.config
+KERNEL_CONFIG_FRAGMENT=kernels/configs/batocera-bcm2837-43.1-20260530-fragment.config
+MODULES="snd-bcm2835-mono"

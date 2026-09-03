@@ -1,0 +1,22 @@
+# Raspberry Pi OS (Debian trixie), Raspberry Pi CM5 kernel tree of the SAME
+# arm64 image as 2026-06-18-raspios-trixie-arm64.facts (that file covers the
+# -v8/CM4 kernel; the image is multi-kernel). Kernel: raspberrypi/linux @
+# stable_20260609 (6.18.34), 2712 build. Verified by mounting the stock image:
+# stock rp1_aout.ko.xz vermagic "6.18.34+rpt-rpi-2712 SMP preempt mod_unload
+# modversions aarch64"; the image ships headers for this tree, so Module.symvers
+# (19188 symbols, RPi-built) and .config come from there.
+# The 6.18 driver source at sound/soc/raspberrypi/rp1_aout.c builds against
+# CONFIG_SND_RP1_AUDIO_OUT=m (renamed from CONFIG_SND_SOC_RASPBERRYPI_RP1_AOUT).
+# Config = headers' .config verbatim except CONFIG_LOCALVERSION="-v8-16k"
+# rewritten to "+rpt-rpi-2712" (RPi's build injects "+rpt-rpi-2712" via build
+# env; folding it into CONFIG_LOCALVERSION reproduces the vermagic exactly).
+IMAGE=2026-06-18-raspios-trixie-arm64-2712
+ARCH=arm64
+KERNEL_RELEASE=6.18.34+rpt-rpi-2712
+VERMAGIC="6.18.34+rpt-rpi-2712 SMP preempt mod_unload modversions aarch64"
+MODVERSIONS=on
+SYMVERS=kernels/symvers/2026-06-18-raspios-trixie-arm64-2712.symvers
+UPSTREAM_COMMIT=c8c7494100e99ee05b11aaa4f0588a223a63d1af
+UPSTREAM_SHA256=e159f4262148242c004f9ed0e035dfb04cc966ad9c83d296839a17305c3acce6
+KERNEL_CONFIG=kernels/configs/2026-06-18-raspios-trixie-arm64-2712.config
+MODULES="rp1-aout-mono"

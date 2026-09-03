@@ -1,0 +1,22 @@
+# Raspberry Pi OS (Debian bookworm, 2026-04-13), CM5 kernel tree of the SAME
+# arm64-lite image as 2026-04-13-raspios-bookworm-arm64-lite.facts (multi-
+# kernel image). Kernel: raspberrypi/linux rpi-6.12.y @ 2026-03-10 (6.12.75,
+# no upstream tag existed at this version - see the -v8 facts for the pinning
+# rationale), 2712 build. Verified by mounting the stock image: stock
+# rp1_aout.ko.xz vermagic "6.12.75+rpt-rpi-2712 SMP preempt mod_unload
+# modversions aarch64"; the image ships headers for this tree
+# (/usr/src/linux-headers-6.12.75+rpt-rpi-2712), so Module.symvers (18917
+# symbols) and .config come from there. CONFIG_SND_RP1_AUDIO_OUT=m.
+# Config = headers' .config verbatim except CONFIG_LOCALVERSION="-v8-16k"
+# rewritten to "+rpt-rpi-2712" (RPi's build injects "+rpt-rpi-2712" via build
+# env; folding it into CONFIG_LOCALVERSION reproduces the vermagic exactly).
+IMAGE=2026-04-13-raspios-bookworm-arm64-lite-2712
+ARCH=arm64
+KERNEL_RELEASE=6.12.75+rpt-rpi-2712
+VERMAGIC="6.12.75+rpt-rpi-2712 SMP preempt mod_unload modversions aarch64"
+MODVERSIONS=on
+SYMVERS=kernels/symvers/2026-04-13-raspios-bookworm-arm64-lite-2712.symvers
+UPSTREAM_COMMIT=47d9548fdf3cff7c8fc8cc332d30a9634415b0b1
+UPSTREAM_SHA256=dab8764d65c380ea54a71e66fbcc4c60cd2038c1bd71f6ce7ce9ef26e6c2cc8c
+KERNEL_CONFIG=kernels/configs/2026-04-13-raspios-bookworm-arm64-lite-2712.config
+MODULES="rp1-aout-mono"

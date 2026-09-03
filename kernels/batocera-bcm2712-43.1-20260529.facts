@@ -1,0 +1,25 @@
+# Batocera 43.1, Raspberry Pi CM5 image (aarch64).
+# Kernel: raspberrypi/linux @ a1073743767f9e7fd... (6.12.62) - same source
+# commit as bcm2711/bcm2837, but bcm2712's defconfig produces a different
+# build: vermagic has NO -v8 suffix ("6.12.62 SMP preempt mod_unload
+# modversions aarch64") and the symbol CRCs differ. Symvers harvested from
+# the stock snd-bcm2835.ko's __versions. Validated by mounting the stock image.
+#
+# IMPORTANT: this image does NOT ship an rp1_aout driver at all (batocera's
+# bcm2712 defconfig lacks CONFIG_SND_SOC_RASPBERRYPI_RP1_AOUT and there is no
+# sound/soc/raspberrypi/ in the squashfs). The PSPi CM5 speaker amp is driven
+# by RP1 aaud PWM on GPIO39 via the pspi-audio-cm5-kernel6+ overlay, so the
+# patched rp1-aout-mono module here is not a replacement for a stock module -
+# it IS the driver. It auto-loads via the DT of:N alias once the overlay is
+# applied by the patcher.
+# Source pinned via configs/batocera-bcm2712.board at tag batocera-43.1.
+IMAGE=batocera-bcm2712-43.1-20260529
+ARCH=arm64
+KERNEL_RELEASE=6.12.62
+VERMAGIC="6.12.62 SMP preempt mod_unload modversions aarch64"
+MODVERSIONS=on
+SYMVERS=kernels/symvers/batocera-bcm2712-43.1-20260529.symvers
+UPSTREAM_COMMIT=a1073743767f9e7fdc7017ababd2a07ea0c97c1c
+UPSTREAM_SHA256=9937857c240971c512f4d27700ca77743ba3bd701a7b3955c41ea8bac5077c7f
+KERNEL_CONFIG=kernels/configs/batocera-bcm2712-43.1-20260529.config
+MODULES="rp1-aout-mono"
