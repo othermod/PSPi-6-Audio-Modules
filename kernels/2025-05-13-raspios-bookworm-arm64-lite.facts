@@ -1,0 +1,35 @@
+# Raspberry Pi OS bookworm 2025-05-13 (arm64-lite image, CM4 kernel), aarch64.
+# Derived ENTIRELY from the stock image (no live probe): mounted
+# 2025-05-13-raspios-bookworm-arm64-lite.img.xz and read from its partitions.
+#
+# Kernel: raspberrypi/linux @ stable_20250428 (3dd2c2c5..., 6.12.25)
+#   - modules tree has 6.12.25+rpt-rpi-v8 and 6.12.25+rpt-rpi-2712; this facts
+#     file covers the -v8 (CM4) kernel. Module file date 2025-04-30 matches the
+#     tag date; kernel deb = 1:6.12.25-1+rpt1 (dpkg status in the image).
+#   - vermagic read from the stock snd-bcm2835.ko (xz) in the image:
+#     "6.12.25+rpt-rpi-v8 SMP preempt mod_unload modversions aarch64"
+#
+# CONFIG_MODVERSIONS is ON and the image ships no Module.symvers, so CRCs were
+# harvested from the stock snd-bcm2835.ko __versions section (62 symbols, same
+# technique as the Batocera image). Committed under kernels/symvers/.
+#
+# Config: the image ships no kernel .config, so KERNEL_CONFIG is the
+# bcm2711_defconfig from the pinned commit, and a one-line fragment rewrites
+# CONFIG_LOCALVERSION="-v8" to "+rpt-rpi-v8" (Raspberry Pi's build env injects
+# +rpt-rpi; folding it into the config reproduces the image vermagic exactly,
+# same trick as the Raspberry Pi OS trixie facts).
+#
+# NOTE: not yet verified on hardware (no bookworm device probed). Build +
+# vermagic are checked by build.sh; runtime behavior is assumed to match the
+# trixie Raspberry Pi OS image (same distro family).
+IMAGE=2025-05-13-raspios-bookworm-arm64-lite
+ARCH=arm64
+KERNEL_RELEASE=6.12.25+rpt-rpi-v8
+VERMAGIC="6.12.25+rpt-rpi-v8 SMP preempt mod_unload modversions aarch64"
+MODVERSIONS=on
+SYMVERS=kernels/symvers/2025-05-13-raspios-bookworm-arm64-lite.symvers
+UPSTREAM_COMMIT=3dd2c2c507c271d411fab2e82a2b3b7e0b6d3f16
+UPSTREAM_SHA256=97494a78933dd45068a01843f4a101f3d548fb9a0e0a824505f7194e9feadd3e
+KERNEL_CONFIG=kernels/configs/2025-05-13-raspios-bookworm-arm64-lite.config
+KERNEL_CONFIG_FRAGMENT=kernels/configs/2025-05-13-raspios-bookworm-arm64-lite-fragment.config
+MODULES="snd-bcm2835-mono"

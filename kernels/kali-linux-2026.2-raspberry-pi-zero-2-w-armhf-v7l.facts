@@ -1,0 +1,25 @@
+# Kali Linux 2026.2, Raspberry Pi Zero 2 W armhf image (v7l kernel tree).
+# The image ships TWO kernels; the firmware auto-picks per board:
+#   -v7l (kernel7l.img) boots on Zero 2 W / CM4 (ARMv7)
+#   -v7  (kernel7.img)  boots on Pi 1 / Zero 1 / CM1 (ARMv7, v6-compat)
+# This file is for the v7l kernel. Kernel: kali's linux-rpi
+# 1:6.12.34-1+rpt1+0kali2 = raspberrypi/linux @ stable_20250702 (6.12.34)
+# plus kali's Debian patch series. Verified by mounting the stock image:
+# vermagic "6.12.34+rpt-rpi-v7l SMP mod_unload modversions ARMv7 p2v8 ",
+# CONFIG_MODVERSIONS=y, no module signing. Kali ships kernel headers in the
+# image (/usr/src/linux-headers-*), so the real Module.symvers (kali-built)
+# and .config come from there - no CRC harvesting needed.
+# Config = headers' .config verbatim except CONFIG_LOCALVERSION="-vv7l"
+# rewritten to "+rpt-rpi-v7l" (same fold as the RPi OS trixie facts).
+# NOTE the trailing space in VERMAGIC is intentional: the ARM kernel emits
+# "ARMv7 p2v8 " with a trailing space and vermagic matching is exact.
+IMAGE=kali-linux-2026.2-raspberry-pi-zero-2-w-armhf-v7l
+ARCH=arm
+KERNEL_RELEASE=6.12.34+rpt-rpi-v7l
+VERMAGIC="6.12.34+rpt-rpi-v7l SMP mod_unload modversions ARMv7 p2v8 "
+MODVERSIONS=on
+SYMVERS=kernels/symvers/kali-linux-2026.2-raspberry-pi-zero-2-w-armhf-v7l.symvers
+UPSTREAM_COMMIT=8f77e03530f65209a377d25023e912b288e039cd
+UPSTREAM_SHA256=6381f6365eb4a57d639bebdadfea14b347b4924c01c37e509f5cdac9b213d236
+KERNEL_CONFIG=kernels/configs/kali-linux-2026.2-raspberry-pi-zero-2-w-armhf-v7l.config
+MODULES="snd-bcm2835-mono"

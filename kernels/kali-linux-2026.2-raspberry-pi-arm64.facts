@@ -1,0 +1,22 @@
+# Kali Linux 2026.2, Raspberry Pi arm64 image (Pi 4/400, CM4, CM5).
+# Kernel: kali's linux-rpi 1:6.12.34-1+rpt1+0kali2 (changelog in image) =
+# raspberrypi/linux @ stable_20250702 (6.12.34) plus kali's Debian patch
+# series. Verified by mounting the stock image: vermagic
+# "6.12.34+rpt-rpi-v8 SMP preempt mod_unload modversions aarch64",
+# CONFIG_MODVERSIONS=y, no module signing.
+# Kali ships kernel headers in the image (/usr/src/linux-headers-*), so the
+# real Module.symvers (18649 symbols, kali-built) and .config come from there
+# - no CRC harvesting needed. The kali patches don't change vermagic or the
+# vmlinux ABI; using kali's own symvers guarantees the CRCs match.
+# Config = headers' .config verbatim except CONFIG_LOCALVERSION="-v8"
+# rewritten to "+rpt-rpi-v8" (same fold as the RPi OS trixie facts).
+IMAGE=kali-linux-2026.2-raspberry-pi-arm64
+ARCH=arm64
+KERNEL_RELEASE=6.12.34+rpt-rpi-v8
+VERMAGIC="6.12.34+rpt-rpi-v8 SMP preempt mod_unload modversions aarch64"
+MODVERSIONS=on
+SYMVERS=kernels/symvers/kali-linux-2026.2-raspberry-pi-arm64.symvers
+UPSTREAM_COMMIT=8f77e03530f65209a377d25023e912b288e039cd
+UPSTREAM_SHA256=6381f6365eb4a57d639bebdadfea14b347b4924c01c37e509f5cdac9b213d236
+KERNEL_CONFIG=kernels/configs/kali-linux-2026.2-raspberry-pi-arm64.config
+MODULES="snd-bcm2835-mono"

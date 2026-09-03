@@ -5,12 +5,12 @@
 # module signing, so vermagic is the only ABI gate. Config extracted from the
 # Lakka-LibreELEC tree at BUILD_ID ad1a27aac8e37e0cf810b243b2bdf9f798e45dd4
 # (projects/RPi/devices/RPi4/linux/linux.aarch64.conf).
-IMAGE=lakka-6.1-cm4
+IMAGE=Lakka-RPi4.aarch64-6.1
 ARCH=arm64
 KERNEL_RELEASE=6.12.66
 VERMAGIC="6.12.66 SMP mod_unload aarch64"
 MODVERSIONS=off
 UPSTREAM_COMMIT=201575782c30fd948415a191a814e28fe0db90dc
 UPSTREAM_SHA256=b89d4a38312f201514711a2e2c6d0bc8a07e6f59b4b96cd5e7b7693854bc7404
-KERNEL_CONFIG=kernels/configs/lakka-6.1-cm4.config
+KERNEL_CONFIG=kernels/configs/Lakka-RPi4.aarch64-6.1.config
 MODULES="snd-bcm2835-mono"

@@ -1,0 +1,20 @@
+# Lakka 6.1, Raspberry Pi 1/Zero image (armhf, 32-bit) - the PSPi Zero build.
+# Kernel: raspberrypi/linux @ 201575782c30... (rpi-6.12.y, 6.12.66)
+# ARMv6 (CPU_V6K) build: vermagic "6.12.66 mod_unload ARMv6 p2v8" (no SMP,
+# no preempt flag shown), CONFIG_MODVERSIONS off, module signing off - so
+# vermagic is the only ABI gate and no symvers file is needed.
+# Validated by mounting Lakka-RPi.arm-6.1.img.gz (SYSTEM squashfs,
+# snd-bcm2835.ko: ELF32 ARM). Build requires an armhf cross toolchain:
+#   build.sh kernels/Lakka-RPi.arm-6.1.facts --cross-compile arm-linux-gnueabihf-
+# Config extracted from the Lakka-LibreELEC tree at BUILD_ID
+# ad1a27aac8e37e0cf810b243b2bdf9f798e45dd4
+# (projects/RPi/devices/RPi/linux/linux.arm.conf).
+IMAGE=Lakka-RPi.arm-6.1
+ARCH=arm
+KERNEL_RELEASE=6.12.66
+VERMAGIC="6.12.66 mod_unload ARMv6 p2v8 "
+MODVERSIONS=off
+UPSTREAM_COMMIT=201575782c30fd948415a191a814e28fe0db90dc
+UPSTREAM_SHA256=b89d4a38312f201514711a2e2c6d0bc8a07e6f59b4b96cd5e7b7693854bc7404
+KERNEL_CONFIG=kernels/configs/Lakka-RPi.arm-6.1.config
+MODULES="snd-bcm2835-mono"

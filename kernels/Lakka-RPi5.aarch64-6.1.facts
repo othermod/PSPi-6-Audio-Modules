@@ -13,12 +13,12 @@
 # the module to ship is rp1-aout-mono. Downmix is enabled by a device-tree
 # property the CM5 overlay sets (mono_mix read via of_property_read_bool at
 # probe) -- there is no module parameter or bootarg on this platform.
-IMAGE=lakka-6.1-cm5
+IMAGE=Lakka-RPi5.aarch64-6.1
 ARCH=arm64
 KERNEL_RELEASE=6.12.66
 VERMAGIC="6.12.66 SMP mod_unload aarch64"
 MODVERSIONS=off
 UPSTREAM_COMMIT=201575782c30fd948415a191a814e28fe0db90dc
 UPSTREAM_SHA256=b89d4a38312f201514711a2e2c6d0bc8a07e6f59b4b96cd5e7b7693854bc7404
-KERNEL_CONFIG=kernels/configs/lakka-6.1-cm4.config
+KERNEL_CONFIG=kernels/configs/Lakka-RPi4.aarch64-6.1.config
 MODULES="rp1-aout-mono"

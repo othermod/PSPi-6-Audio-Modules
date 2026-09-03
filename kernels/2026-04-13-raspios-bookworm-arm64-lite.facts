@@ -1,0 +1,39 @@
+# Raspberry Pi OS bookworm 2026-04-13 (arm64-lite image, CM4 kernel), aarch64.
+# Derived ENTIRELY from the stock image (no live probe): mounted
+# 2026-04-13-raspios-bookworm-arm64-lite.img.xz and read from its partitions.
+#
+# Kernel: raspberrypi/linux rpi-6.12.y @ 47d9548f... (6.12.75)
+#   - the image's kernel8.img embeds "Linux version 6.12.75+rpt-rpi-v8 ...
+#     Debian 1:6.12.75-1+rpt1~bookworm (2026-03-11)"; modules tree has
+#     6.12.75+rpt-rpi-v8 and 6.12.75+rpt-rpi-2712 (this file covers -v8/CM4).
+#   - no tag exists at 6.12.75 (tags jump stable_20250916=6.12.47 ->
+#     oldstable_20260611=6.12.93), so the pin is the rpi-6.12.y branch tip
+#     the day before the kernel build date (2026-03-10, SUBLEVEL=75 verified).
+#
+#   - vermagic read from the stock snd-bcm2835.ko (xz) in the image:
+#     "6.12.75+rpt-rpi-v8 SMP preempt mod_unload modversions aarch64"
+#
+# CONFIG_MODVERSIONS is ON and the image ships no Module.symvers, so CRCs were
+# harvested from the stock snd-bcm2835.ko __versions section (62 symbols, same
+# technique as Batocera). The CRCs come from the image's own kernel, so they
+# are correct for the target regardless of the source-pin approximation above.
+#
+# Config: the image ships no kernel .config, so KERNEL_CONFIG is the
+# bcm2711_defconfig from the pinned commit, and a one-line fragment rewrites
+# CONFIG_LOCALVERSION="-v8" to "+rpt-rpi-v8" (Raspberry Pi's build env injects
+# +rpt-rpi; folding it into the config reproduces the image vermagic exactly).
+#
+# NOTE: not yet verified on hardware (no bookworm device probed). Build +
+# vermagic are checked by build.sh; runtime behavior is assumed to match the
+# Raspberry Pi OS trixie image (same distro family).
+IMAGE=2026-04-13-raspios-bookworm-arm64-lite
+ARCH=arm64
+KERNEL_RELEASE=6.12.75+rpt-rpi-v8
+VERMAGIC="6.12.75+rpt-rpi-v8 SMP preempt mod_unload modversions aarch64"
+MODVERSIONS=on
+SYMVERS=kernels/symvers/2026-04-13-raspios-bookworm-arm64-lite.symvers
+UPSTREAM_COMMIT=47d9548fdf3cff7c8fc8cc332d30a9634415b0b1
+UPSTREAM_SHA256=dab8764d65c380ea54a71e66fbcc4c60cd2038c1bd71f6ce7ce9ef26e6c2cc8c
+KERNEL_CONFIG=kernels/configs/2026-04-13-raspios-bookworm-arm64-lite.config
+KERNEL_CONFIG_FRAGMENT=kernels/configs/2026-04-13-raspios-bookworm-arm64-lite-fragment.config
+MODULES="snd-bcm2835-mono"

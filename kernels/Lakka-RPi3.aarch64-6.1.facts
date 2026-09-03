@@ -1,0 +1,20 @@
+# Lakka 6.1, Raspberry Pi 3 image (aarch64).
+# Kernel: raspberrypi/linux @ 201575782c30... (rpi-6.12.y, 6.12.66)
+# Same source pin as Lakka-RPi4 but a DIFFERENT build: CONFIG_PREEMPT=y and
+# CONFIG_MODVERSIONS=y (verified against the stock image's snd-bcm2835.ko:
+# vermagic "6.12.66 SMP preempt mod_unload modversions aarch64", 62 __versions
+# CRCs harvested into the symvers file). Module signing disabled.
+# Validated by mounting Lakka-RPi3.aarch64-6.1.img.gz (SYSTEM squashfs).
+# Config extracted from the Lakka-LibreELEC tree at BUILD_ID
+# ad1a27aac8e37e0cf810b243b2bdf9f798e45dd4
+# (projects/RPi/devices/RPi3/linux/linux.aarch64.conf).
+IMAGE=Lakka-RPi3.aarch64-6.1
+ARCH=arm64
+KERNEL_RELEASE=6.12.66
+VERMAGIC="6.12.66 SMP preempt mod_unload modversions aarch64"
+MODVERSIONS=on
+UPSTREAM_COMMIT=201575782c30fd948415a191a814e28fe0db90dc
+UPSTREAM_SHA256=b89d4a38312f201514711a2e2c6d0bc8a07e6f59b4b96cd5e7b7693854bc7404
+KERNEL_CONFIG=kernels/configs/Lakka-RPi3.aarch64-6.1.config
+SYMVERS=kernels/symvers/Lakka-RPi3.aarch64-6.1.symvers
+MODULES="snd-bcm2835-mono"

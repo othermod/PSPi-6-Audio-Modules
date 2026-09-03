@@ -86,7 +86,9 @@ fetch_pspi() {
 # stderr and the build log.
 prepare_kdir() {
     local facts="$1" log="$2"
-    local kdir="$WORK_ROOT/linux-$UPSTREAM_COMMIT-$ARCH"
+    # Per-image work tree: facts files can share a commit+ARCH but differ in
+    # config (e.g. Lakka RPi3 vs RPi4), so the tree must be namespaced.
+    local kdir="$WORK_ROOT/linux-$IMAGE-$UPSTREAM_COMMIT-$ARCH"
 
     if [[ -f "$kdir/.prepared" ]]; then
         log "cached"
@@ -121,16 +123,16 @@ prepare_kdir() {
 
     log "oldconfig + modules_prepare"
     {
-        ( cd "$kdir" && yes "" | make ARCH="$ARCH" oldconfig )
+        ( cd "$kdir" && yes "" | make ARCH="$ARCH" ${CROSS_COMPILE:+CROSS_COMPILE="$CROSS_COMPILE"} oldconfig )
         # Fragment merge (buildroot-style): some distros layer a fragment on
         # top of their base defconfig at build time; reproduce that with the
         # kernel's own merge tool, then settle the result.
         if [[ -n "${KERNEL_CONFIG_FRAGMENT:-}" ]]; then
             say "merging config fragment: $KERNEL_CONFIG_FRAGMENT"
             ( cd "$kdir" && ./scripts/kconfig/merge_config.sh -m .config "$HERE/$KERNEL_CONFIG_FRAGMENT" )
-            ( cd "$kdir" && yes "" | make ARCH="$ARCH" oldconfig )
+            ( cd "$kdir" && yes "" | make ARCH="$ARCH" ${CROSS_COMPILE:+CROSS_COMPILE="$CROSS_COMPILE"} oldconfig )
         fi
-        make -C "$kdir" ARCH="$ARCH" -j"$(nproc)" modules_prepare
+        make -C "$kdir" ARCH="$ARCH" ${CROSS_COMPILE:+CROSS_COMPILE="$CROSS_COMPILE"} -j"$(nproc)" modules_prepare
     } > "$log" 2>&1 || { tail -30 "$log" >&2; die "kernel prepare failed ($log)"; }
     fi
 
