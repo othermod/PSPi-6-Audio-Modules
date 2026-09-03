@@ -1,0 +1,26 @@
+# Raspberry Pi OS (Debian trixie), Raspberry Pi CM4 image (aarch64).
+# Kernel: raspberrypi/linux @ stable_20260609 (6.18.34, matches the
+# "1:6.18.34-1+rpt1 (2026-06-09)" deb this image runs).
+# Probed from the booted image: vermagic via `readelf -p .modinfo` on the
+# stock snd-bcm2835.ko.xz ("6.18.34+rpt-rpi-v8 SMP preempt mod_unload
+# modversions aarch64"). Modules ship .xz-compressed.
+#
+# CONFIG_MODVERSIONS is ON, but unlike other images we do NOT need to harvest
+# CRCs from the stock module: RPi OS ships kernel headers including the real
+# Module.symvers (raspberrypi-kernel-headers package). That file is committed
+# under kernels/symvers/ here.
+#
+# Config = the image's /boot/config-6.18.34+rpt-rpi-v8 verbatim, except
+# CONFIG_LOCALVERSION="-v8" was rewritten to "+rpt-rpi-v8": RPi's own build
+# injects "+rpt-rpi" from their build env rather than the config, and folding
+# it into CONFIG_LOCALVERSION reproduces the image vermagic exactly.
+IMAGE=raspberry-pi-os-trixie-cm4
+ARCH=arm64
+KERNEL_RELEASE=6.18.34+rpt-rpi-v8
+VERMAGIC="6.18.34+rpt-rpi-v8 SMP preempt mod_unload modversions aarch64"
+MODVERSIONS=on
+SYMVERS=kernels/symvers/raspberry-pi-os-trixie-cm4.symvers
+UPSTREAM_COMMIT=c8c7494100e99ee05b11aaa4f0588a223a63d1af
+UPSTREAM_SHA256=e159f4262148242c004f9ed0e035dfb04cc966ad9c83d296839a17305c3acce6
+KERNEL_CONFIG=kernels/configs/raspberry-pi-os-trixie-cm4.config
+MODULES="snd-bcm2835-mono"

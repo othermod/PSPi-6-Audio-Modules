@@ -25,6 +25,7 @@ dist/<image>/              build output: <module>.ko + manifest.txt
 |---|---|---|---|
 | `kernels/lakka-6.1-cm4.facts` | Lakka 6.1 (CM4, arm64) | 6.12.66 | modversions off |
 | `kernels/batocera-43.1-cm4.facts` | Batocera 43.1 (CM4, arm64) | 6.12.62-v8 | modversions on; symvers harvested from stock module |
+| `kernels/raspberry-pi-os-trixie-cm4.facts` | Raspberry Pi OS (trixie, CM4, arm64) | 6.18.34+rpt-rpi-v8 | modversions on; symvers from RPi OS kernel headers |
 
 ## Deployment notes
 
@@ -43,6 +44,13 @@ copy then shadows the stock module), and copy the updated
 Run `batocera-save-overlay` to persist the root filesystem changes across
 reboots. Batocera *does* honor the overlay's bootargs, so the cmdline's
 `snd_bcm2835.mono_mix=1` activates the downmix with no extra hook.
+
+**Raspberry Pi OS** — install the `.ko` into `/lib/modules/<kver>/updates/`
+and run `depmod -a <kver>` (the `updates/` copy then shadows the stock
+module), and copy the updated `pspi-audio-cm4-kernel6+.dtbo` from the PSPi
+repo to `/boot/firmware/overlays/`. Reboot. The image's config.txt already
+references the overlay, and its `snd_bcm2835.mono_mix=1` bootargs land on
+the cmdline.
 
 ## Building
 
