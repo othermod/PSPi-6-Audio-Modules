@@ -22,6 +22,13 @@
 #   MODULES           space-separated module dir names (under rpi/audio/ in
 #                     the PSPi repo, e.g. snd-bcm2835-mono rp1-aout-mono)
 #
+# Optional fields are only meaningful when set (e.g. KERNEL_CONFIG_FRAGMENT,
+# KERNEL_SUBLEVEL); a facts file that omits one must not inherit the previous
+# file's value, so build_image unsets every one of these before sourcing.
+FACTS_VARS=(IMAGE ARCH KERNEL_RELEASE VERMAGIC MODVERSIONS SYMVERS
+            UPSTREAM_COMMIT UPSTREAM_SHA256 KERNEL_CONFIG
+            KERNEL_CONFIG_FRAGMENT KERNEL_SUBLEVEL MODULES)
+#
 # Usage:
 #   build.sh kernels/lakka-6.1-cm4.facts
 #   build.sh kernels/*.facts                       (build everything)
@@ -215,6 +222,10 @@ verify_ko() {
 # ---------------------------------------------------------------- one image
 build_image() {
     local facts="$1"
+    # Facts files are sourced into this shell; unset the optional fields so a
+    # file that omits one (e.g. KERNEL_CONFIG_FRAGMENT) cannot inherit the
+    # previous image's value.
+    unset "${FACTS_VARS[@]}"
     # shellcheck disable=SC1090
     source "$facts"
     FACTS="$facts"
