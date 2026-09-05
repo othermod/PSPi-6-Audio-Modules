@@ -6,8 +6,12 @@ on:
       pspi_ref:
         description: "PSPi-Version-6 ref to build against"
         default: "main"
-  # A tag push is the only way the release job can run: the release step keys
-  # off github.ref, and workflow_dispatch always runs on a branch ref.
+      release_tag:
+        description: "tag to publish the release under (assets replaced on re-run)"
+        default: "latest"
+  # A tag push publishes a versioned release at the pushed tag. A manual run
+  # publishes to the release_tag input (default "latest", a rolling release
+  # whose assets are replaced on every dispatch).
   push:
     tags: ["v*"]
 
@@ -73,7 +77,10 @@ jobs:
   # and is what consumers (eg. the PSPi patcher's distro scripts) key on.
   release:
     needs: build
-    if: startsWith(github.ref, 'refs/tags/')
+    # Tag pushes release at the pushed tag; manual runs release at the
+    # release_tag input (default "latest"). Re-publishing over an existing
+    # tag updates that release and replaces same-named assets.
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -105,4 +112,6 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
+          # The pushed tag on tag pushes; the release_tag input otherwise.
+          tag_name: ${{ (startsWith(github.ref, 'refs/tags/') && github.ref_name) || (inputs.release_tag || 'latest') }}
           files: release-assets/*

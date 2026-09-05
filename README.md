@@ -21,11 +21,13 @@ dist/<image>/              build output: <module>.ko + manifest.txt
 
 ## Release assets
 
-Releases are produced by CI: `workflow_dispatch` builds everything and
-publishes artifacts; **pushing a `v*` tag** runs the same build and attaches
-the release assets to the tag. Every facts file builds in its own parallel
-job (armhf/ARMv6 facts cross-compile with `arm-linux-gnueabihf-` on the
-same arm64 runner).
+Releases are produced by CI. A manual `workflow_dispatch` run builds
+everything, publishes artifacts, and **publishes a release at the tag named
+in the `release_tag` input** (default `latest` — a rolling release whose
+assets are replaced on every run). **Pushing a `v*` tag** runs the same
+build and attaches the assets to a versioned release at that tag. Every
+facts file builds in its own parallel job (armhf/ARMv6 facts cross-compile
+with `arm-linux-gnueabihf-` on the same arm64 runner).
 
 Release assets are flat (GitHub has no asset directories), so the
 `dist/<IMAGE>/` structure is flattened into the filename:
