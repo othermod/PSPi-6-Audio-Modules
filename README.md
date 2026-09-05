@@ -19,6 +19,33 @@ build.sh                   builds every module named in a facts file
 dist/<image>/              build output: <module>.ko + manifest.txt
 ```
 
+## Release assets
+
+Releases are produced by CI: `workflow_dispatch` builds everything and
+publishes artifacts; **pushing a `v*` tag** runs the same build and attaches
+the release assets to the tag. Every facts file builds in its own parallel
+job (armhf/ARMv6 facts cross-compile with `arm-linux-gnueabihf-` on the
+same arm64 runner).
+
+Release assets are flat (GitHub has no asset directories), so the
+`dist/<IMAGE>/` structure is flattened into the filename:
+
+| Asset | Contents |
+|---|---|
+| `<IMAGE>-<module>.ko` | one patched module build, keyed by the facts file's `IMAGE=` value and the module directory name under `rpi/audio/` in the PSPi repo |
+| `<IMAGE>-manifest.txt` | that image's build manifest (kernel, vermagic, pspi ref, per-module sha256) |
+| `SHA256SUMS` | checksums of every `.ko` and manifest in the release |
+
+`IMAGE` values are unique per facts file, so names never collide no matter
+how many images ship the same module. Consumers (the PSPi-Version-6 distro
+scripts) key on `IMAGE` when selecting the asset to download. Example for
+Lakka 6.1:
+
+    Lakka-RPi4.aarch64-6.1-snd-bcm2835-mono.ko     # CM4 image, bcm2835 downmix
+    Lakka-RPi3.aarch64-6.1-snd-bcm2835-mono.ko     # zero2 target: DIFFERENT kernel build (preempt, modversions)
+    Lakka-RPi.arm-6.1-snd-bcm2835-mono.ko          # zero1 target: ARMv6 build
+    Lakka-RPi5.aarch64-6.1-rp1-aout-mono.ko        # CM5 image, RP1 downmix
+
 ## Supported images
 
 | facts file | image | kernel | notes |
