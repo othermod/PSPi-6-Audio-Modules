@@ -43,7 +43,10 @@ jobs:
       - name: Install build deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential bc bison flex libssl-dev libelf-dev curl git patch
+          sudo apt-get install -y build-essential bc bison flex libssl-dev libelf-dev libdw-dev curl git patch
+          # libdw-dev supplies dwarf.h/-ldw for the kernel's gendwarfksyms
+          # host tool (built during modules_prepare when the image kernel
+          # config sets CONFIG_GENDWARFKSYMS=y, eg. Ubuntu 7.0).
           # The kernel modules_prepare toolchain for armhf targets.
           if grep -q '^ARCH=arm$' "kernels/${{ matrix.facts }}"; then
             sudo apt-get install -y gcc-arm-linux-gnueabihf
